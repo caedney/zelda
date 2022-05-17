@@ -15,7 +15,7 @@ class Player(pygame.sprite.Sprite):
         self.direction = pygame.math.Vector2()
         self.speed = 5
         self.attacking = False
-        self.attack_timeout = 400
+        self.attack_cooldown = 400
         self.attack_time = None
         self.obstacle_sprites = obstacle_sprites
 
@@ -127,7 +127,7 @@ class Player(pygame.sprite.Sprite):
         current_time = pygame.time.get_ticks()
 
         if self.attacking:
-            if current_time - self.attack_time >= self.attack_timeout:
+            if current_time - self.attack_time >= self.attack_cooldown:
                 self.attacking = False
 
     def animate(self):
