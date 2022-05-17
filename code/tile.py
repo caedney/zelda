@@ -8,3 +8,4 @@ class Tile(pygame.sprite.Sprite):
 
         self.image = pygame.image.load('graphics/test/rock.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
+        self.hit_box = self.rect.inflate(0, -10)

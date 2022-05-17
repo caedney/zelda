@@ -1,5 +1,5 @@
 import pygame, sys
-from settings import *
+from settings import FPS, WIDTH, HEIGTH
 from level import Level
 
 
