@@ -31,7 +31,6 @@ class Player(Entity):
 
         # magic
         self.create_magic = create_magic
-        # self.destroy_magic= destroy_magic
         self.magic_index = 0
         self.magic = list(MAGIC_DATA.keys())[self.magic_index]
         self.can_switch_magic = True
@@ -43,6 +42,11 @@ class Player(Entity):
         self.energy = self.stats['energy']
         self.speed = self.stats['speed']
         self.exp = 123
+
+        # damage timer
+        self.vulnerable = True
+        self.hurt_time = None
+        self.invulnerability_duration = 500
 
     def import_player_assets(self):
         self.animations = {
@@ -145,11 +149,17 @@ class Player(Entity):
             if 'attack' in self.status:
                 self.status = self.status.replace('_attack', '')
 
+    def get_weapon_damage(self):
+        base_damage = self.stats['attack']
+        weapon_damage = WEAPON_DATA[self.weapon]['damage']
+
+        return base_damage + weapon_damage
+
     def timers(self):
         current_time = pygame.time.get_ticks()
 
         if self.attacking:
-            if current_time - self.attack_time >= self.attack_cooldown:
+            if current_time - self.attack_time >= self.attack_cooldown + WEAPON_DATA[self.weapon]['cooldown']:
                 self.attacking = False
                 self.destroy_attack()
 
@@ -160,6 +170,10 @@ class Player(Entity):
         if not self.can_switch_magic:
             if current_time - self.magic_switch_time >= self.switch_duration_cooldown:
                 self.can_switch_magic = True
+
+        if not self.vulnerable:
+            if current_time - self.hurt_time >= self.invulnerability_duration:
+                self.vulnerable = True
 
     def animate(self):
         animation = self.animations[self.status]
@@ -173,6 +187,13 @@ class Player(Entity):
         # set the image
         self.image = animation[int(self.frame_index)]
         self.rect = self.image.get_rect(center = self.hit_area.center)
+
+        # flicker
+        if not self.vulnerable:
+            alpha = self.wave_value()
+            self.image.set_alpha(alpha)
+        else:
+            self.image.set_alpha(255)
 
     def update(self):
         self.input()

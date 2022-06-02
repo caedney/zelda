@@ -6,7 +6,7 @@ class Tile(pygame.sprite.Sprite):
     def __init__(self, pos, groups, type, surface = pygame.Surface((TILE_SIZE, TILE_SIZE))):
         super().__init__(groups)
 
-        self.type = type
+        self.sprite_type = type
         self.image = surface
 
         if type == 'object':
