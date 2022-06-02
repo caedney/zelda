@@ -1,8 +1,10 @@
 import pygame
-from settings import WORLD_MAP, TILE_SIZE
+from settings import TILE_SIZE
 from tile import Tile
 from player import Player
 from camera import Camera
+from weapon import Weapon
+from ui import UI
 from random import choice
 from import_csv import import_csv
 from import_images import import_images
@@ -18,8 +20,14 @@ class Level:
         self.visible_sprites = Camera()
         self.obstacles_sprites = pygame.sprite.Group()
 
+        # attack sprites
+        self.current_attack = None
+
         # sprites setup
         self.create_map()
+
+        # user interface
+        self.ui = UI()
 
     def create_map(self):
         layouts = {
@@ -51,11 +59,28 @@ class Level:
                             object_surface = graphics['objects'][int(col)]
                             Tile((x, y), [self.visible_sprites, self.obstacles_sprites], 'object', object_surface)
 
-        self.player = Player((2000, 1430), [self.visible_sprites], self.obstacles_sprites)
+        self.player = Player(
+            (2000, 1430),
+            [self.visible_sprites],
+            self.obstacles_sprites,
+            self.create_attack,
+            self.destroy_attack,
+            self.create_magic,
+        )
+
+    def create_attack(self):
+        self.current_attack = Weapon(self.player, [self.visible_sprites])
+
+    def destroy_attack(self):
+        if self.current_attack:
+            self.current_attack.kill()
+            self.current_attack = None
+
+    def create_magic(self, style, strength, cost):
+        print(style, strength, cost)
 
     def run(self):
         # update and draw the game
         self.visible_sprites.draw(self.player)
         self.visible_sprites.update()
-        # debug
-        debug(self.player.status)
+        self.ui.display(self.player)
