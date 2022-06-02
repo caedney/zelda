@@ -6,10 +6,10 @@ from enemy import Enemy
 from camera import Camera
 from weapon import Weapon
 from ui import UI
-from random import choice
+from particle_animation import ParticleAnimation
+from random import choice, randint
 from import_csv import import_csv
 from import_images import import_images
-from debug import debug
 
 
 class Level:
@@ -31,6 +31,9 @@ class Level:
 
         # user interface
         self.ui = UI()
+
+        # particles
+        self.particle_animation = ParticleAnimation()
 
     def create_map(self):
         layouts = {
@@ -90,6 +93,7 @@ class Level:
                                     [self.visible_sprites, self.attackable_sprites],
                                     self.obstacles_sprites,
                                     self.damage_player,
+                                    self.death_particles,
                                 )
 
     def create_attack(self):
@@ -111,7 +115,14 @@ class Level:
                 if collisions:
                     for collision in collisions:
                         if collision.sprite_type == 'grass':
+                            pos = collision.rect.center
+                            offset = pygame.math.Vector2(0, 75)
+
+                            for leaf in range(randint(3, 6)):
+                                self.particle_animation.create_grass_particles(pos - offset, [self.visible_sprites])
+
                             collision.kill()
+
                         elif collision.sprite_type == 'enemy':
                             collision.get_damage(self.player, attack_sprite.sprite_type)
 
@@ -120,7 +131,10 @@ class Level:
             self.player.health -= amount
             self.player.vulnerable = False
             self.player.hurt_time = pygame.time.get_ticks()
-            # particles
+            self.particle_animation.create_particles(attack_type, self.player.rect.center, [self.visible_sprites])
+
+    def death_particles(self, pos, particle_type):
+        self.particle_animation.create_particles(particle_type, pos, [self.visible_sprites])
 
     def run(self):
         # update and draw the game
