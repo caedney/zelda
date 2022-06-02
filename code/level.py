@@ -2,6 +2,7 @@ import pygame
 from settings import TILE_SIZE
 from tile import Tile
 from player import Player
+from enemy import Enemy
 from camera import Camera
 from weapon import Weapon
 from ui import UI
@@ -34,6 +35,7 @@ class Level:
             'boundary': import_csv('map/map_FloorBlocks.csv'),
             'grass': import_csv('map/map_Grass.csv'),
             'object': import_csv('map/map_Objects.csv'),
+            'entities': import_csv('map/map_Entities.csv')
         }
 
         graphics = {
@@ -59,14 +61,23 @@ class Level:
                             object_surface = graphics['objects'][int(col)]
                             Tile((x, y), [self.visible_sprites, self.obstacles_sprites], 'object', object_surface)
 
-        self.player = Player(
-            (2000, 1430),
-            [self.visible_sprites],
-            self.obstacles_sprites,
-            self.create_attack,
-            self.destroy_attack,
-            self.create_magic,
-        )
+                        if style == 'entities':
+                            if col == '394':
+                                self.player = Player(
+                                    (x, y),
+                                    [self.visible_sprites],
+                                    self.obstacles_sprites,
+                                    self.create_attack,
+                                    self.destroy_attack,
+                                    self.create_magic,
+                                )
+                            else:
+                                if col == '390': monster_name = 'bamboo'
+                                elif col == '391': monster_name = 'spirit'
+                                elif col == '392': monster_name = 'raccoon'
+                                elif col == '393': monster_name = 'squid'
+
+                                Enemy(monster_name, (x, y), [self.visible_sprites], self.obstacles_sprites)
 
     def create_attack(self):
         self.current_attack = Weapon(self.player, [self.visible_sprites])
@@ -83,4 +94,5 @@ class Level:
         # update and draw the game
         self.visible_sprites.draw(self.player)
         self.visible_sprites.update()
+        self.visible_sprites.enemy_update(self.player)
         self.ui.display(self.player)
