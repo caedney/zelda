@@ -3,6 +3,12 @@ WIDTH = 1280
 HEIGTH = 720
 FPS = 60
 TILE_SIZE = 64
+HIT_AREA_OFFSET = {
+    'player': -26,
+    'object': -40,
+    'grass': -10,
+    'invisible': 0,
+}
 
 # ui
 BAR_HEIGHT = 20

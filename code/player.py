@@ -11,7 +11,7 @@ class Player(Entity):
         self.image = pygame.image.load('graphics/test/player.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
         self.status = 'down_idle'
-        self.hit_area = self.rect.inflate(0, -24)
+        self.hit_area = self.rect.inflate(-6, HIT_AREA_OFFSET['player'])
         self.attacking = False
         self.attack_cooldown = 400
         self.attack_time = None

@@ -1,5 +1,5 @@
 import pygame, sys
-from settings import FPS, WIDTH, HEIGTH
+from settings import *
 from level import Level
 
 
@@ -22,7 +22,7 @@ class Game:
                     if event.key == pygame.K_m:
                         self.level.toggle_menu()
 
-            self.screen.fill("black")
+            self.screen.fill(WATER_COLOR)
             self.level.run()
             pygame.display.update()
             self.clock.tick(FPS)
