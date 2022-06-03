@@ -8,6 +8,7 @@ from weapon import Weapon
 from ui import UI
 from particle_animation import ParticleAnimation
 from magic import Magic
+from upgrade import Upgrade
 from random import choice, randint
 from import_csv import import_csv
 from import_images import import_images
@@ -17,6 +18,7 @@ class Level:
     def __init__(self):
         # get the display surface
         self.display_surface = pygame.display.get_surface()
+        self.game_paused = False
 
         # sprite group setup
         self.visible_sprites = Camera()
@@ -32,6 +34,7 @@ class Level:
 
         # user interface
         self.ui = UI()
+        self.upgrade = Upgrade(self.player)
 
         # particles
         self.particle_animation = ParticleAnimation()
@@ -96,6 +99,7 @@ class Level:
                                     self.obstacles_sprites,
                                     self.damage_player,
                                     self.death_particles,
+                                    self.add_exp,
                                 )
 
     def create_attack(self):
@@ -142,10 +146,19 @@ class Level:
     def death_particles(self, pos, particle_type):
         self.particle_animation.create_particles(particle_type, pos, [self.visible_sprites])
 
+    def add_exp(self, amount):
+        self.player.exp += amount
+
+    def toggle_menu(self):
+        self.game_paused = not self.game_paused
+
     def run(self):
-        # update and draw the game
         self.visible_sprites.draw(self.player)
-        self.visible_sprites.update()
-        self.visible_sprites.enemy_update(self.player)
-        self.player_attack()
         self.ui.display(self.player)
+
+        if self.game_paused:
+            self.upgrade.display()
+        else:
+            self.visible_sprites.update()
+            self.visible_sprites.enemy_update(self.player)
+            self.player_attack()
