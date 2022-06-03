@@ -7,6 +7,7 @@ from camera import Camera
 from weapon import Weapon
 from ui import UI
 from particle_animation import ParticleAnimation
+from magic import Magic
 from random import choice, randint
 from import_csv import import_csv
 from import_images import import_images
@@ -34,6 +35,7 @@ class Level:
 
         # particles
         self.particle_animation = ParticleAnimation()
+        self.magic = Magic(self.particle_animation)
 
     def create_map(self):
         layouts = {
@@ -100,7 +102,11 @@ class Level:
         self.current_attack = Weapon(self.player, [self.visible_sprites, self.attack_sprites])
 
     def create_magic(self, style, strength, cost):
-        print(style, strength, cost)
+        if style == 'heal':
+            self.magic.heal(self.player, strength, cost, [self.visible_sprites])
+
+        if style == 'flame':
+            self.magic.flame(self.player, cost, [self.visible_sprites, self.attack_sprites])
 
     def destroy_attack(self):
         if self.current_attack:

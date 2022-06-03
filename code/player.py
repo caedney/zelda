@@ -155,6 +155,18 @@ class Player(Entity):
 
         return base_damage + weapon_damage
 
+    def get_magic_damage(self):
+        base_damage = self.stats['magic']
+        magic_damage = MAGIC_DATA[self.magic]['strength']
+
+        return base_damage + magic_damage
+
+    def energy_recovery(self):
+        if self.energy < self.stats['energy']:
+            self.energy += 0.01 * self.stats['magic']
+        else:
+            self.energy = self.stats['energy']
+
     def timers(self):
         current_time = pygame.time.get_ticks()
 
@@ -201,3 +213,4 @@ class Player(Entity):
         self.get_status()
         self.animate()
         self.move(self.speed)
+        self.energy_recovery()
