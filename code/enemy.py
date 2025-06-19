@@ -3,7 +3,6 @@ from entity import Entity
 from import_images import import_images
 from settings import *
 
-
 class Enemy(Entity):
     def __init__(self, enemy_name, pos, groups, obstacle_sprites, damage_player, death_particles, add_exp):
         super().__init__(groups)

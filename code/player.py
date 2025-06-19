@@ -3,7 +3,6 @@ from entity import Entity
 from settings import *
 from import_images import import_images
 
-
 class Player(Entity):
     def __init__(self, pos, groups, obstacle_sprites, create_attack, destroy_attack, create_magic):
         super().__init__(groups)

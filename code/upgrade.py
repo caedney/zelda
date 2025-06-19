@@ -2,7 +2,6 @@ import pygame
 from upgrade_item import UpgradeItem
 from settings import *
 
-
 class Upgrade:
     def __init__(self, player):
         # general setup

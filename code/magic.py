@@ -2,7 +2,6 @@ import pygame
 from settings import *
 from random import randint
 
-
 class Magic:
     def __init__(self, particle_animation):
         self.particle_animation = particle_animation

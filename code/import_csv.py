@@ -1,6 +1,5 @@
 from csv import reader
 
-
 def import_csv(path):
     terrain_map = []
 

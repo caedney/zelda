@@ -3,7 +3,6 @@ from particles import Particles
 from import_images import import_images
 from random import choice
 
-
 class ParticleAnimation:
     def __init__(self):
         self.frames = {

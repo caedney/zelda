@@ -1,7 +1,6 @@
 import pygame
 from settings import *
 
-
 class UpgradeItem:
     def __init__(self, l, t, w, h, index, font):
         self.rect = pygame.Rect(l, t, w, h)

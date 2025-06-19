@@ -1,7 +1,6 @@
 import pygame
 from os import walk
 
-
 def import_images(path):
     image_surfaces = []
 

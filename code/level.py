@@ -13,7 +13,6 @@ from random import choice, randint
 from import_csv import import_csv
 from import_images import import_images
 
-
 class Level:
     def __init__(self):
         # get the display surface
